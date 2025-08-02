@@ -38,7 +38,7 @@ local lib = {
 		local UICorner_6 = {} -- Instance.new("UICorner")
 
 		Niggaui.Name = "Nigga ui"
-		Niggaui.Parent = game.Players.LocalPlayer.PlayerGui
+		Niggaui.Parent = game.CoreGui
 		Niggaui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 		MainContainer.Name = "MainContainer"
@@ -50,6 +50,8 @@ local lib = {
 		MainContainer.Position = UDim2.new(0.5, 0, 0.5, 0)
 		MainContainer.Size = UDim2.new(0, 570, 0, 340)
 		MainContainer.Active = true
+		
+		Niggaui.ResetOnSpawn = false
 		
 		local function AddRipple(Button)
 			local Clickbox
