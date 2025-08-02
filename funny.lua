@@ -424,7 +424,7 @@ Frame.BackgroundTransparency = 1
 								TextLabel.Position = UDim2.new(0, 8, 0, 0)
 								TextLabel.Size = UDim2.new(1, -100, 1, 0)
 								TextLabel.Font = Enum.Font.ArialBold
-								TextLabel.Text = "Name"
+								TextLabel.Text = name
 								TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 								TextLabel.TextSize = 14.000
 								TextLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -547,17 +547,5 @@ Frame.BackgroundTransparency = 1
 		}
 	end,
 }
-
---[[local window = lib.Window()
-local firsttab = window.Tab("Hello")
-local secondtab = window.Tab("World")
-
-local mainsection = firsttab.Section("Mobs")
-mainsection.Toggle("Toggle", function(call)
-	print(call)
-end, true)
-mainsection.Button("Click This", function()
-	print("clicked it")
-end)]]
 
 return lib
