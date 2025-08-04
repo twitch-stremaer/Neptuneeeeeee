@@ -5,6 +5,7 @@ pcall(function()
 end)
 
 local TweenSevrice = game:GetService("TweenService")
+local Run = game:GetService("RunService")
 
 local Info = TweenInfo.new(0.1, Enum.EasingStyle.Sine)
 local function Tween(Object, Properties, Info2)
@@ -38,8 +39,9 @@ local lib = {
 		local UICorner_6 = {} -- Instance.new("UICorner")
 
 		Niggaui.Name = "Nigga ui"
-		Niggaui.Parent = game.CoreGui
+		Niggaui.Parent = Run:IsStudio() and game.Players.LocalPlayer.PlayerGui or game.CoreGui
 		Niggaui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+		Niggaui.ResetOnSpawn = false
 
 		MainContainer.Name = "MainContainer"
 		MainContainer.Parent = Niggaui
@@ -50,8 +52,6 @@ local lib = {
 		MainContainer.Position = UDim2.new(0.5, 0, 0.5, 0)
 		MainContainer.Size = UDim2.new(0, 570, 0, 340)
 		MainContainer.Active = true
-		
-		Niggaui.ResetOnSpawn = false
 		
 		local function AddRipple(Button)
 			local Clickbox
@@ -542,6 +542,98 @@ Frame.BackgroundTransparency = 1
 								
 								AddRipple(Clickbox)
 							end,
+							Slider = function(name, min, max, def, callback)
+								local Slider = Instance.new("Frame")
+								local TextLabel = Instance.new("TextLabel")
+								local Frame = Instance.new("Frame")
+								local UICorner = Instance.new("UICorner")
+								local Frame_2 = Instance.new("Frame")
+								local UICorner_2 = Instance.new("UICorner")
+								local TextLabel_2 = Instance.new("TextLabel")
+
+								Slider.Name = "Slider"
+								Slider.Parent = ScrollingFrame
+								Slider.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+								Slider.BorderColor3 = Color3.fromRGB(0, 0, 0)
+								Slider.BorderSizePixel = 0
+								Slider.Size = UDim2.new(1, -17, 0, 30)
+
+								TextLabel.Parent = Slider
+								TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+								TextLabel.BackgroundTransparency = 1.000
+								TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+								TextLabel.BorderSizePixel = 0
+								TextLabel.Position = UDim2.new(0, 8, 0, 0)
+								TextLabel.Size = UDim2.new(1, -100, 1, 0)
+								TextLabel.Font = Enum.Font.ArialBold
+								TextLabel.Text = name
+								TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+								TextLabel.TextSize = 14.000
+								TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+								Frame.Parent = Slider
+								Frame.AnchorPoint = Vector2.new(1, 0.5)
+								Frame.BackgroundColor3 = Color3.fromRGB(39, 40, 39)
+								Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+								Frame.BorderSizePixel = 0
+								Frame.Position = UDim2.new(1, -8, 0.5, 0)
+								Frame.Size = UDim2.new(0, 100, 0, 15)
+
+								UICorner.CornerRadius = UDim.new(1, 0)
+								UICorner.Parent = Frame
+
+								Frame_2.Parent = Frame
+								Frame_2.BackgroundColor3 = Color3.fromRGB(47, 148, 198)
+								Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+								Frame_2.BorderSizePixel = 0
+								Frame_2.Size = UDim2.new(0.330000013, 0, 1, 0)
+
+								UICorner_2.CornerRadius = UDim.new(1, 0)
+								UICorner_2.Parent = Frame_2
+
+								TextLabel_2.Parent = Frame
+								TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+								TextLabel_2.BackgroundTransparency = 1.000
+								TextLabel_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+								TextLabel_2.BorderSizePixel = 0
+								TextLabel_2.Size = UDim2.new(1, 0, 1, 0)
+								TextLabel_2.Font = Enum.Font.ArialBold
+								TextLabel_2.Text = tostring(def)
+								TextLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+								TextLabel_2.TextSize = 14.000
+								
+
+								local ClickBox = Instance.new("TextButton")
+								ClickBox.Parent = Frame
+								ClickBox.Text = ""
+								ClickBox.BackgroundTransparency = 1
+								ClickBox.ZIndex = 1
+								ClickBox.Size = UDim2.fromScale(1, 1)
+								
+								local Dragging = false
+								local Last
+								ClickBox.MouseButton1Down:Connect(function(Key)
+									--if WindowConnections:IsPress(Key) then
+									Dragging = true
+									while Dragging do
+										local Percent = math.clamp((game:GetService("Players").LocalPlayer:GetMouse().X - Frame.AbsolutePosition.X) / Frame.AbsoluteSize.X, 0, 1) -- will you please fuck off roblox ai i dont want it
+										local Value = min + (Percent*(max-min))
+										TweenSevrice:Create(Frame_2, TweenInfo.new(0.1, Enum.EasingStyle.Quint), {Size = UDim2.fromScale(Percent, 1)}):Play()
+										if math.floor(Value) ~= Last then
+											TextLabel_2.Text = math.floor(Value);
+											Last = math.floor(Value);
+											(callback or function() end)(math.floor(Value))
+										end
+										wait()
+									end
+									--end
+								end)
+								game:GetService("UserInputService").InputEnded:Connect(function(Key)
+									if Key.UserInputType == Enum.UserInputType.MouseButton1 or Key.UserInputType == Enum.UserInputType.Touch then
+										Dragging = false
+									end
+								end)
+							end,
 						}
 					end,
 				}
@@ -549,5 +641,18 @@ Frame.BackgroundTransparency = 1
 		}
 	end,
 }
+
+--[[local window = lib.Window()
+local firsttab = window.Tab("Hello")
+local secondtab = window.Tab("World")
+
+local mainsection = firsttab.Section("Mobs")
+mainsection.Toggle("Toggle", function(call)
+	print(call)
+end, true)
+mainsection.Button("Click This", function()
+	print("clicked it")
+end)
+mainsection.Slider("Hello", 5, 10, 8, print)]]
 
 return lib
